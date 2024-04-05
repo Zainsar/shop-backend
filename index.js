@@ -1,0 +1,30 @@
+const mongoose = require('mongoose')
+const cors = require('cors')
+const dotenv = require('dotenv')
+const express = require('express')
+const userRoutes = require('./routes/user')
+const authRoutes = require('./routes/auth')
+const productRoutes = require('./routes/product')
+const cartRoutes = require('./routes/cart')
+const orderRoutes = require('./routes/order')
+const stripeRoutes = require('./routes/stripe')
+const app = express()
+app.use(express.json())
+app.use(cors())
+dotenv.config()
+
+app.use('/api/user', userRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/product', productRoutes)
+app.use('/api/cart', cartRoutes)
+app.use('/api/order', orderRoutes)
+app.use('/api/checkout', stripeRoutes)
+
+mongoose
+    .connect(process.env.DB_CONNECT)
+    .then(() => console.log('Database Connected'))
+    .catch((err) => console.log(err))
+
+app.listen(process.env.PORT, () => {
+    console.log(`Server app and runing on port ${process.env.PORT} `)
+})
